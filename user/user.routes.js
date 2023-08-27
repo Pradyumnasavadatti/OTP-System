@@ -4,7 +4,8 @@ const router = express.Router();
 
 router.get("/", controller.getIsCorrect);
 router.post("/newUser", controller.postUser);
-router.get("/checkUser", controller.isPresent);
+router.get("/checkUsername", controller.isPresent);
 router.get("/getUser", controller.getUser);
+router.delete("/deleteUser", controller.remove);
 
 module.exports = router;
