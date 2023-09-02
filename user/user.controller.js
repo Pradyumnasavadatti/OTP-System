@@ -1,5 +1,5 @@
 const dao = require("./user.dao");
-const common = require("../common/common");
+const common = require("../util/common");
 
 //Sign In
 const getIsCorrect = async (req, res) => {
@@ -27,13 +27,13 @@ const isPresent = async (req, res) => {
 
 //To get datails of user
 const getUser = async (req, res) => {
-  const user = await dao.getUser(req.body.token);
+  const user = await dao.getUser(req.body.userId);
   if (user) common.successRes(res, user);
   else common.failure_func(res);
 };
 
 const remove = async (req, res) => {
-  const result = await dao.deleteUser(req.body.token);
+  const result = await dao.deleteUser(req.body.userId);
   if (result) common.successRes(res, "Successfully deleted");
   else common.failure_func(res);
 };

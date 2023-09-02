@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const validator = require("email-validator");
 
 const bcryptCompare = async (password, actualPassword) => {
   return await bcrypt.compare(password, actualPassword);
@@ -25,6 +26,10 @@ const successRes = (res, data) => {
   res.json({ msg: data });
 };
 
+const isValidEmail = (email) => {
+  return validator.validate(email);
+};
+
 module.exports = {
   bcryptCompare,
   bcryptHash,
@@ -32,4 +37,5 @@ module.exports = {
   jwtVerify,
   failure_func,
   successRes,
+  isValidEmail,
 };

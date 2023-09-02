@@ -1,11 +1,12 @@
 const express = require("express");
 const controller = require("./user.controller");
 const router = express.Router();
-
-router.get("/", controller.getIsCorrect);
-router.post("/newUser", controller.postUser);
-router.get("/checkUsername", controller.isPresent);
-router.get("/getUser", controller.getUser);
-router.delete("/deleteUser", controller.remove);
+const middlewareToken = require("../middleware/token_verifier");
+const middlewareEmail = require("../middleware/email_verifier");
+router.get("/", middlewareEmail, controller.getIsCorrect);
+router.post("/newUser", middlewareEmail, controller.postUser);
+router.get("/checkUsername", middlewareEmail, controller.isPresent);
+router.get("/getUser", middlewareToken, controller.getUser);
+router.delete("/deleteUser", middlewareToken, controller.remove);
 
 module.exports = router;

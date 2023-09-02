@@ -1,20 +1,25 @@
 const model = require("./user.model");
-const common = require("../common/common");
+const common = require("../util/common");
 const todoService = require("../todo/todo.service");
 const getIsCorrect = async (username, password) => {
-  let user = await model.find({
-    username: username,
-  });
-  if (user.length != 0) {
-    const result = await common.bcryptCompare(password, user[0].password);
-    if (result) {
-      const token = common.jwtSign({ id: user[0]._id });
-      return token;
+  try {
+    let user = await model.find({
+      username: username,
+    });
+    if (user.length != 0) {
+      const result = await common.bcryptCompare(password, user[0].password);
+      if (result) {
+        const token = common.jwtSign({ id: user[0]._id });
+        return token;
+      } else {
+        return null;
+      }
     } else {
       return null;
     }
-  } else {
-    return null;
+  } catch (err) {
+    console.log(err);
+    common.failure_func(res);
   }
 };
 
@@ -47,21 +52,20 @@ const isPresent = async (username) => {
   }
 };
 
-const getUser = async (token) => {
+const getUser = async (userId) => {
   try {
-    const dataFromToken = common.jwtVerify(token);
-    const user = await model.findById(dataFromToken.id);
+    const user = await model.findById(userId);
     if (user) return user;
     else return null;
   } catch (err) {
+    console.log(err);
     return null;
   }
 };
 
-const deleteUser = async (token) => {
+const deleteUser = async (userId) => {
   try {
-    const data = common.jwtVerify(token);
-    const user = await model.findById(data.id);
+    const user = await model.findById(userId);
     await todoService.deleteTodos(user.todos);
     await model.findOneAndDelete({ _id: user._id });
     return true;

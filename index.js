@@ -1,7 +1,10 @@
 const express = require("express");
 const routes = require("./todo/todo.routes");
 const routesUser = require("./user/user.routes");
-require("dotenv").config();
+
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
 require("./config/db").connection();
 

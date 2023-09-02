@@ -1,9 +1,9 @@
 const dao = require("./todo.dao");
-const common = require("../common/common");
+const common = require("../util/common");
 
 //Receives the array of todoids and returns the fullfledged details of todo
 const getAll = async (req, res) => {
-  const details = await dao.getAllTodo(req.body);
+  const details = await dao.getAllTodo(req.body.todos);
   if (details) {
     common.successRes(res, details);
   } else {
@@ -27,7 +27,7 @@ const remove = async (req, res) => {
 
 //Updating todo from not completed -> completed
 const update = async (req, res) => {
-  const isUpdated = await dao.updateTodo(req.body);
+  const isUpdated = await dao.updateTodo(req.body._id);
   if (isUpdated) common.successRes(res, "Successfully updated");
   else common.failure_func(res);
 };
