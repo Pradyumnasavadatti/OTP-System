@@ -1,5 +1,6 @@
 const model = require("./todo.model");
 const userService = require("../user/user.service");
+const redis = require("../config/redis.config");
 
 const getAllTodo = async (array) => {
   try {
@@ -55,6 +56,8 @@ const updateTodo = async (todoId) => {
     return false;
   }
 };
+
+
 
 module.exports = {
   getAllTodo,

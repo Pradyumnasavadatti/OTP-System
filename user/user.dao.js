@@ -1,6 +1,8 @@
 const model = require("./user.model");
 const common = require("../util/common");
 const todoService = require("../todo/todo.service");
+const { send_email, getOTPFromRedis } = require("../util/email");
+
 const getIsCorrect = async (username, password) => {
   try {
     let user = await model.find({
@@ -74,10 +76,36 @@ const deleteUser = async (userId) => {
   }
 };
 
+const emailVerify = async (username) => {
+  try {
+    await send_email(username);
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+const otpVerify = async (entered_otp, username) => {
+  try {
+    const otp = await getOTPFromRedis(username);
+    if (otp && otp == entered_otp) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 module.exports = {
   getIsCorrect,
   postUser,
   isPresent,
   getUser,
   deleteUser,
+  emailVerify,
+  otpVerify,
 };

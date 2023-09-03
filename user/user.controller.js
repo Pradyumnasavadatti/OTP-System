@@ -1,6 +1,5 @@
 const dao = require("./user.dao");
 const common = require("../util/common");
-
 //Sign In
 const getIsCorrect = async (req, res) => {
   const token = await dao.getIsCorrect(req.body.username, req.body.password);
@@ -38,10 +37,24 @@ const remove = async (req, res) => {
   else common.failure_func(res);
 };
 
+const emailVerify = async (req, res) => {
+  const isSent = await dao.emailVerify(req.body.username);
+  if (isSent) common.successRes(res, "Verification code sent!");
+  else common.failure_func(res);
+};
+
+const otpVerify = async (req, res) => {
+  if (await dao.otpVerify(req.body.otp, req.body.username))
+    common.successRes(res, "OTP verification completed!");
+  else common.failure_func(res);
+};
+
 module.exports = {
   getIsCorrect,
   postUser,
   isPresent,
   getUser,
   remove,
+  emailVerify,
+  otpVerify,
 };
